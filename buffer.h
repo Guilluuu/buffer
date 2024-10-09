@@ -30,6 +30,7 @@ typedef struct cell *buffer;
 void newBuffer(buffer *B);
 void destroyBuffer(buffer *B);
 unsigned isBempty(buffer B);
+void top(buffer B, void *E, DataType *type);
 void pushInt(buffer *B, int value);
 void pushFloat(buffer *B, float value);
 void pushChar(buffer *B, char value);
