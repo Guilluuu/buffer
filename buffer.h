@@ -10,7 +10,7 @@
 typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
 
 typedef struct {
-    DataType type;    
+    DataType type;
     union {
         int iVal;
         float fVal;
@@ -30,12 +30,12 @@ typedef struct cell *buffer;
 void newBuffer(buffer *B);
 void destroyBuffer(buffer *B);
 unsigned isBempty(buffer B);
-void top(buffer B, void *E, DataType *type);
+void top(buffer B, void **E, DataType *type);
 void pushInt(buffer *B, int value);
 void pushFloat(buffer *B, float value);
 void pushChar(buffer *B, char value);
 void pushString(buffer *B, char *value);
-void processTopValue(buffer *B);
+void processTopValue(buffer *B, void* element);
 void flush(buffer *b);
 
 #endif // BUFFER_H
