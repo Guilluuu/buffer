@@ -1,143 +1,63 @@
+#include "buffer.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define MAX_SIZE 1000
 
-typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
+void newBuffer(buffer *B) { B->n = 0; }
 
-typedef struct {
-  DataType type; // Tipo de dato almacenado
-  union {        // Unión para almacenar diferentes tipos de valores
-    int iVal;
-    float fVal;
-    char cVal;
-    char sVal[MAX_SIZE];
-  } data;
-} bufferType;
+int isBEmpty(buffer B) { return B.n == 0; }
 
-struct cell {
-  bufferType elemento;
-  struct cell *sig;
-};
-
-typedef struct cell *buffer;
-
-void newBuffer(buffer *B) { *B = NULL; }
-
-void destroyBuffer(buffer *B) {
-  buffer aux;
-  aux = *B;
-  while (aux != NULL) {
-    aux = aux->sig;
-    free(*B);
-    *B = aux;
-  }
+void pushchar(buffer *B, char element)
+{
+    B->element[B->n].type        = CharType;
+    B->element[B->n].charElement = element;
+    B->n++;
+}
+void pushint(buffer *B, char element)
+{
+    B->element[B->n].type        = IntType;
+    B->element[B->n].charElement = element;
+    B->n++;
+}
+void pushfloat(buffer *B, float element)
+{
+    B->element[B->n].type        = FloatType;
+    B->element[B->n].charElement = element;
+    B->n++;
 }
 
-unsigned isBempty(buffer B) { return B == NULL; }
+void pop(buffer *B, void *recover)
+{
+    switch (B->element[B->n - 1].type)
+    {
+        case InvalidType:
 
-void top(buffer B, void *E, DataType *type) {
-  if (!isBempty(B)) {
-    *type = B->elemento.type; // Guardar el tipo del elemento actual
+            perror("Error in dataType");
+            B->n--;
+            break;
 
-    // Según el tipo de dato, devolver el valor correcto
-    switch (B->elemento.type) {
-    case INT_TYPE:
-      *(int *)E = B->elemento.data.iVal;
-      break;
-    case FLOAT_TYPE:
-      *(float *)E = B->elemento.data.fVal;
-      break;
-    case CHAR_TYPE:
-      *(char *)E = B->elemento.data.cVal;
-      break;
-    case STRING_TYPE:
-      strcpy((char *)E, B->elemento.data.sVal);
-      break;
-    default:
-      return;
+        case IntType:
+
+            *(int *) recover      = B->element[B->n - 1].intElement;
+            B->element[B->n].type = IntType;
+            B->n--;
+            break;
+
+        case FloatType:
+
+            *(float *) recover    = B->element[B->n - 1].floatElement;
+            B->element[B->n].type = IntType;
+            B->n--;
+            break;
+
+        case CharType:
+
+            *(char *) recover     = B->element[B->n - 1].charElement;
+            B->element[B->n].type = IntType;
+            B->n--;
+            break;
+
+        case StringType:
+            break;
     }
-  } else {
-    perror("Buffer is empty\n");
-    exit(1);
-  }
 }
 
-void pushInt(buffer *B, int value) {
-  buffer aux = (buffer)malloc(sizeof(struct cell));
-  aux->elemento.type = INT_TYPE;
-  aux->elemento.data.iVal = value;
-  aux->sig = *B;
-  *B = aux;
-}
-
-// Función para insertar un valor flotante en el buffer
-void pushFloat(buffer *B, float value) {
-  buffer aux = (buffer)malloc(sizeof(struct cell));
-  aux->elemento.type = FLOAT_TYPE;
-  aux->elemento.data.fVal = value;
-  aux->sig = *B;
-  *B = aux;
-}
-
-// Función para insertar un carácter en el buffer
-void pushChar(buffer *B, char value) {
-  buffer aux = (buffer)malloc(sizeof(struct cell));
-  aux->elemento.type = CHAR_TYPE;
-  aux->elemento.data.cVal = value;
-  aux->sig = *B;
-  *B = aux;
-}
-
-// Función para insertar una cadena en el buffer
-void pushString(buffer *B, char *value) {
-  buffer aux = (buffer)malloc(sizeof(struct cell));
-  aux->elemento.type = STRING_TYPE;
-  strcpy(aux->elemento.data.sVal, value); // Copiamos la cadena
-  aux->sig = *B;
-  *B = aux;
-}
-
-void pop(buffer *B) {
-  buffer aux;
-  if (!isBempty(*B)) /*si pila no vacía*/
-  {
-    aux = *B;
-    *B = (*B)->sig;
-    free(aux);
-  }
-}
-
-void processTopValue(buffer *B, void *elemento) {
-  void *result = malloc(MAX_SIZE);
-  DataType type;
-
-  top(*B, result, &type);
-
-  switch (type) {
-  case STRING_TYPE:
-    strcpy((char *)elemento, (char *)result);
-    break;
-  case CHAR_TYPE:
-    *(char *)elemento = *(char *)result;
-    break;
-  case FLOAT_TYPE:
-    *(float *)elemento = *(float *)result;
-    break;
-  case INT_TYPE:
-    *(int *)elemento = *(int *)result;
-    break;
-  default:
-    printf("Unknown type\n");
-    break;
-  }
-  pop(B);
-
-  free(result);
-}
-
-void flush(buffer *b) {
-  while (!isBempty(*b)) {
-    pop(b);
-  }
-}
+int BufferSize(buffer B) { return B.n; }

@@ -1,41 +1,61 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include <stdlib.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#define MAX_SIZE 1000
+#define MAX_SIZE        2048
+#define MAX_STRING_SIZE 32
 
-typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, STRING_TYPE } DataType;
+typedef enum
+{
+    InvalidType = 1 << 0,
+    CharType    = 1 << 1,
+    StringType  = 1 << 2,
+    IntType     = 1 << 3,
+    FloatType   = 1 << 4
 
-typedef struct {
+} DataType;
+
+typedef struct
+{
+    union
+    {
+        int   intElement;
+        float floatElement;
+        char  charElement;
+        char  StringElement[MAX_STRING_SIZE];
+    };
+
     DataType type;
-    union {
-        int iVal;
-        float fVal;
-        char cVal;
-        char sVal[MAX_SIZE];
-    } data;
-} bufferType;
 
-struct cell {
-    bufferType elemento;
-    struct cell *sig;
-};
+} bufferElement;
 
-typedef struct cell *buffer;
+typedef struct
+{
+    bufferElement element[MAX_SIZE];
+    int           n;
+
+} buffer;
+
 
 // Prototipos de las funciones
+
 void newBuffer(buffer *B);
-void destroyBuffer(buffer *B);
-unsigned isBempty(buffer B);
-void top(buffer B, void **E, DataType *type);
-void pushInt(buffer *B, int value);
-void pushFloat(buffer *B, float value);
-void pushChar(buffer *B, char value);
-void pushString(buffer *B, char *value);
-void processTopValue(buffer *B, void* element);
-void flush(buffer *b);
+
+int isBEmpty(buffer B);
+
+void pushchar(buffer *B, char element);
+
+void pushint(buffer *B, char element);
+
+void pushfloat(buffer *B, float element);
+
+void pop(buffer *B, void *recover);
+
+int BufferSize(buffer B);
+
 
 #endif // BUFFER_H

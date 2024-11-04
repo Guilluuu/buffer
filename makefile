@@ -2,7 +2,7 @@
 CC = gcc
 
 # Opciones del compilador
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Wextra -fsanitize=address,null -g -O1
 
 # Nombre del ejecutable
 EXEC = buffer_program
