@@ -91,7 +91,7 @@ int BufferSize(buffer B) { return B.n; }
 
 void flush(buffer *B)
 {
-    while (!isBEmpty(*B))
+    while (!buffer_is_empty(*B))
     {
         B->element[B->n].type = InvalidType;
         B->n--;

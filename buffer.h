@@ -45,7 +45,9 @@ typedef struct
 
 void newBuffer(buffer *B);
 
-int isBEmpty(buffer B);
+int buffer_is_empty(buffer B);
+
+int buffer_is_full(buffer B);
 
 void pushchar(buffer *B, char element);
 
