@@ -1,7 +1,7 @@
 #include "buffer.h"
 
 
-int main()
+int main() // Do a generic push "__Generic"
 {
     buffer buffer;
     newBuffer(&buffer);
