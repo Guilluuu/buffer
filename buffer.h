@@ -6,16 +6,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_SIZE        2048
-#define MAX_STRING_SIZE 32
+#define MAXBUFFER_SIZE 2048
 
 typedef enum
 {
     InvalidType = 1 << 0,
     CharType    = 1 << 1,
-    StringType  = 1 << 2,
-    IntType     = 1 << 3,
-    FloatType   = 1 << 4
+    IntType     = 1 << 2,
+    FloatType   = 1 << 3
 
 } DataType;
 
@@ -26,7 +24,6 @@ typedef struct
         int   intElement;
         float floatElement;
         char  charElement;
-        char  StringElement[MAX_STRING_SIZE];
     };
 
     DataType type;
@@ -35,7 +32,7 @@ typedef struct
 
 typedef struct
 {
-    bufferElement element[MAX_SIZE];
+    bufferElement element[MAXBUFFER_SIZE];
     int           n;
 
 } buffer;
@@ -51,7 +48,7 @@ int buffer_is_full(buffer B);
 
 void __pushchar(buffer *B, char element);
 
-void __pushint(buffer *B, char element);
+void __pushint(buffer *B, int element);
 
 void __pushfloat(buffer *B, float element);
 

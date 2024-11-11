@@ -20,7 +20,7 @@ void __pushchar(buffer *B, char element)
     B->element[B->n].charElement = element;
     B->n++;
 }
-void __pushint(buffer *B, char element)
+void __pushint(buffer *B, int element)
 {
     if (buffer_is_full(*B))
     {
@@ -49,7 +49,7 @@ void pop(buffer *B, void *recover)
 {
     if (buffer_is_empty(*B))
     {
-        perror("Error in <pop function> - buffer is empty");
+        perror("Error in <pop function> - buffer is empty\n");
         exit(4);
     }
 
@@ -81,9 +81,9 @@ void pop(buffer *B, void *recover)
             B->element[B->n].type = IntType;
             B->n--;
             break;
-
-        case StringType:
-            break;
+        default:
+            perror("Not datatype avaliable\n");
+            exit(5);
     }
 }
 
