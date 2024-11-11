@@ -5,8 +5,9 @@ int main() // Do a generic push "__Generic"
 {
     buffer buffer;
     newBuffer(&buffer);
-    pushint(&buffer, 14);
-    pushchar(&buffer, 'W');
+
+    push(&buffer, 14);
+    push(&buffer, 'W');
 
 
     char readelement;
@@ -15,7 +16,6 @@ int main() // Do a generic push "__Generic"
     printf("1st top value: %c\n", readelement);
     pop(&buffer, &readelement2);
     printf("2nd top value: %d\n", readelement2);
-
 
     return 0;
 }

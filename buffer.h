@@ -49,15 +49,22 @@ int buffer_is_empty(buffer B);
 
 int buffer_is_full(buffer B);
 
-void pushchar(buffer *B, char element);
+void __pushchar(buffer *B, char element);
 
-void pushint(buffer *B, char element);
+void __pushint(buffer *B, char element);
 
-void pushfloat(buffer *B, float element);
+void __pushfloat(buffer *B, float element);
 
 void pop(buffer *B, void *recover);
 
 int BufferSize(buffer B);
+
+#define push(Bptr, T)            \
+    _Generic((T),                \
+    int: __pushint(Bptr, T),     \
+    float: __pushfloat(Bptr, T), \
+    char: __pushchar(Bptr, T),   \
+    default: __pushint(Bptr, T))
 
 
 #endif // BUFFER_H

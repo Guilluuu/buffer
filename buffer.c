@@ -8,11 +8,11 @@ int buffer_is_empty(buffer B) { return B.n == 0; }
 int buffer_is_full(buffer B) { return B.n == MAX_SIZE; }
 
 
-void pushchar(buffer *B, char element)
+void __pushchar(buffer *B, char element)
 {
     if (buffer_is_full(*B))
     {
-        perror("Error in <pushchar function> - Buffer is full\n");
+        perror("Error in <__pushchar function> - Buffer is full\n");
         exit(1);
     }
 
@@ -20,11 +20,11 @@ void pushchar(buffer *B, char element)
     B->element[B->n].charElement = element;
     B->n++;
 }
-void pushint(buffer *B, char element)
+void __pushint(buffer *B, char element)
 {
     if (buffer_is_full(*B))
     {
-        perror("Error in <pushint function> - Buffer is full\n");
+        perror("Error in <__pushint function> - Buffer is full\n");
         exit(2);
     }
 
@@ -32,11 +32,11 @@ void pushint(buffer *B, char element)
     B->element[B->n].charElement = element;
     B->n++;
 }
-void pushfloat(buffer *B, float element)
+void __pushfloat(buffer *B, float element)
 {
     if (buffer_is_full(*B))
     {
-        perror("Error in <pushfloat function> - Buffer is full\n");
+        perror("Error in <__pushfloat function> - Buffer is full\n");
         exit(3);
     }
 
